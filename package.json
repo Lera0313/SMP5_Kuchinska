@@ -1,9 +1,9 @@
 {
   "name": "mongoapp",
   "version": "1.0.0",
-  "description": "JavaScript Lab4 Mongoose",
+  "description": "SMP Laboratory work 5, MongoDB+mongoose+Docker",
   "main": "index.js",
-  "author": "Dmytro Pomyluiko KI-191",
+  "author": "Kuchinska Valeria, group KI-191",
   "license": "ISC",
     "dependencies": {
       "dotenv": "^8.2.0",

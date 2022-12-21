@@ -18,90 +18,82 @@ const options = {
 
 const url = `mongodb://${MONGO_DB_HOSTNAME}:${MONGO_DB_PORT}/${MONGO_DB}`;
  
-const trackScheme = new Schema({name: String, 
-    author: String, genre: String, date: Number}, 
+const filmScheme = new Schema({name: String, 
+    director: String, genre: String, date: Number}, 
     {versionKey: false});
-const Track = mongoose.model("Track", trackScheme);
+const Film = mongoose.model("Film", filmScheme);
  
 app.use(express.static(__dirname + "/public"));
  
-// підключення до бази даних
-mongoose.connect(url, options, function(err){
-    if(err) return console.log(err);
-    app.listen(3000, function(){
-        console.log("Сервер очікує підключення...");
-    });
-});
-
-// для отримання книг
-app.get("/api/songs", function(req, res){
+// для отримання films
+app.get("/api/films", function(req, res){
         
-    Track.find({}, function(err, tracks){
+    Film.find({}, function(err, films){
         if(err) 
             return console.log(err);
-        res.send(tracks)
+        res.send(films)
     });
 });
  
-// для отримання книги
-app.get("/api/songs/:id", function(req, res){
+// для отримання film
+app.get("/api/films/:id", function(req, res){
          
     const id = req.params.id;
-    Track.findOne({_id: id}, function(err, track){       
+    Film.findOne({_id: id}, function(err, film){       
         if(err) 
             return console.log(err);
-        res.send(track);
+        res.send(film);
     });
 });
     
-// для додавання книги в базу даних
-app.post("/api/songs", jsonParser, function (req, res) {
+// для додавання film в базу даних
+app.post("/api/films", jsonParser, function (req, res) {
         
     if(!req.body) 
         return res.sendStatus(400);
         
-    const trackName = req.body.name;
-    const trackAuthor = req.body.author;
-    const trackGenre = req.body.genre;
-    const trackDate = req.body.date;
-    const track = new Track({name: trackName, 
-        author: trackAuthor, genre: trackGenre, date: trackDate});
+    const filmName = req.body.name;
+    const filmDirector = req.body.director;
+    const filmGenre = req.body.genre;
+    const filmDate = req.body.date;
+    const film = new Film({name: filmName, 
+        director: filmDirector, genre: filmGenre, date: filmDate});
         
-    track.save(function(err){
+        film.save(function(err){
         if(err) 
             return console.log(err);
-        res.send(track);
+        res.send(film);
     });
 });
 
-// для вилучення книги із бази даних
-app.delete("/api/songs/:id", function(req, res){
+// для вилучення films із бази даних
+app.delete("/api/films/:id", function(req, res){
          
     const id = req.params.id;
-    Track.findByIdAndDelete(id, function(err, track){            
+    Film.findByIdAndDelete(id, function(err, film){            
         if(err) 
             return console.log(err);
-        res.send(track);
+        res.send(film);
     });
 });
 
-// для оновлення інформації про книгу
-app.put("/api/songs", jsonParser, function(req, res){
+// для оновлення інформації про film
+app.put("/api/films", jsonParser, function(req, res){
          
     if(!req.body) 
         return res.sendStatus(400);
     const id = req.body.id;
-    const trackName = req.body.name;
-    const trackAuthor = req.body.author;
-    const trackGenre = req.body.genre;
-    const trackDate = req.body.pages;
-    const newTrack = {author: trackAuthor, 
-        name: trackName, genre: trackGenre, date: trackDate};
+    const filmName = req.body.name;
+    const filmDirector = req.body.director;
+    const filmGenre = req.body.genre;
+    const filmDate = req.body.date;
+    const newFilm = {director: filmDirector, 
+        name: filmName, genre: filmGenre, date: filmDate};
      
-    Track.findOneAndUpdate({_id: id}, newTrack, {new: true}, 
-        function(err, track){
+    Film.findOneAndUpdate({_id: id}, newFilm, {new: true}, 
+        function(err, film){
         if(err) 
             return console.log(err); 
-        res.send(track);
+        res.send(film);
     });
 });
